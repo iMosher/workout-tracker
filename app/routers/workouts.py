@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session, selectinload
 from app.database import SessionLocal
-from app.models import Workout, Exercise
-from app.schemas import WorkoutCreate
+from app.models import Workout, Exercise, Set
+from app.schemas import WorkoutCreate, WorkoutResponse
+from typing import List
 
 router = APIRouter()
 
@@ -17,6 +18,7 @@ def get_db():
 #POST a new Workout
 @router.post("/", tags=["workouts"])
 def create_workout(workout: WorkoutCreate, db: Session = Depends(get_db)):
+    
     #Create Workout record
     db_workout = Workout(date=workout.date)
     db.add(db_workout)
@@ -28,6 +30,13 @@ def create_workout(workout: WorkoutCreate, db: Session = Depends(get_db)):
         db_exercise = Exercise(name=exercise.name, workout_id=db_workout.id)
         db.add(db_exercise)
         db.commit()
+        db.refresh(db_exercise)
+        for set_data in exercise.sets:
+            db_set = Set(reps=set_data.reps, weight =set_data.weight, exercise_id = db_exercise.id)
+            db.add(db_set)
+    
+    db.commit()
+    return db_workout
     
     return{
         "id": db_workout.id, 
@@ -36,17 +45,9 @@ def create_workout(workout: WorkoutCreate, db: Session = Depends(get_db)):
     }
 
 #GET all Workouts
-@router.get("/", tags=["workouts"])
+@router.get("/", response_model=List[WorkoutResponse])
 def get_all_workouts(db: Session = Depends(get_db)):
-    workouts = db.query(Workout).options(selectinload(Workout.exercises)).all()
-    return [
-        {
-            "id": workout.id,
-            "date": str(workout.date),
-            "exercises": [exercise.name for exercise in workout.exercises]
-        }
-        for workout in workouts
-    ]
+    return db.query(Workout).all()
 
 
 #GET workout by id

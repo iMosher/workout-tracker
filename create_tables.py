@@ -3,4 +3,4 @@ from app.models import Workout, Exercise
 
 Base.metadata.create_all(bind=engine)
 
-print("Workout and Exercise tables created!")
+print("Workout, Set, and Exercise tables created!")
