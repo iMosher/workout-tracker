@@ -8,7 +8,7 @@ class Workout(Base):
     id = Column(Integer, primary_key=True, index=True)
     date = Column(Date, nullable=False)
 
-    exercises = relationship("Exercise", back_populates="workout", cascade="all, delete")
+    exercises = relationship("Exercise", back_populates="workout", cascade="all, delete-orphan")
 
 class Exercise(Base):
     __tablename__ = "exercises"
@@ -18,7 +18,7 @@ class Exercise(Base):
     workout_id = Column(Integer, ForeignKey("workouts.id")) #replace eventually
 
     workout = relationship("Workout",back_populates="exercises")
-    sets = relationship("Set", back_populates="exercise", cascade="all, delete")
+    sets = relationship("Set", back_populates="exercise", cascade="all, delete-orphan")
 
 class Set(Base):
     __tablename__ = "sets"

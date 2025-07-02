@@ -1,15 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import List, Optional
 from datetime import date
 
-class Set(BaseModel):
-    reps: int #number of reps
-    weight: float #weight value (for now this is just a float with no unit; assume lbs)
-
-class Exercise(BaseModel):
-    name: str
-    sets: List[Set]
-
+#Create Schemas
 class SetCreate(BaseModel):
     reps: int
     weight: float
@@ -22,51 +15,25 @@ class WorkoutCreate(BaseModel):
     date: date
     exercises: List[ExerciseCreate]
 
+
+#Response Schemas
 class SetResponse(BaseModel):
+    id: int
     reps: int
     weight: float
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class ExerciseResponse(BaseModel):
+    id: int
     name: str
     sets: List[SetResponse]
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class WorkoutResponse(BaseModel):
     id: int
     date: date
     exercises: List[ExerciseResponse]
 
-    class Config:
-        orm_mode = True
-
-
-'''
-
-Example JSON input for this schema:
-
-{
-  "date": "2025-07-02",
-  "exercises": [
-    {
-      "name": "Squat",
-      "sets": [
-        { "reps": 5, "weight": 185 },
-        { "reps": 5, "weight": 195 }
-      ]
-    },
-    {
-      "name": "Lunges",
-      "sets": [
-        { "reps": 8, "weight": 50 },
-        { "reps": 8, "weight": 50 }
-      ]
-    }
-  ]
-}
-
-'''
+    model_config = ConfigDict(from_attributes=True)
