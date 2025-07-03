@@ -54,8 +54,8 @@ def test_create_workout(test_db):
                 {
                     "name": "Bench Press",
                     "sets": [
-                        {"reps": 5, "weight": 135.0},
-                        {"reps": 5, "weight": 145.0}
+                        {"reps": 5.0, "weight": 135.0},
+                        {"reps": 5.0, "weight": 145.0}
                     ]
                 }
             ]
@@ -79,7 +79,7 @@ def test_get_all_workouts(test_db):
             "exercises": [
                 {
                     "name": "Deadlift",
-                    "sets": [{"reps": 3, "weight": 315.0}]
+                    "sets": [{"reps": 3.0, "weight": 315.0}]
                 }
             ]
         }
@@ -102,7 +102,7 @@ def test_get_workout_by_id(test_db):
             "exercises": [
                 {
                     "name": "Overhead Press",
-                    "sets": [{"reps": 5, "weight": 95.0}]
+                    "sets": [{"reps": 5.0, "weight": 95.0}]
                 }
             ]
         }
@@ -119,7 +119,7 @@ def test_get_workout_by_id(test_db):
     assert data["id"] == workout_id
     assert data["date"] == "2025-07-05"
     assert data["exercises"][0]["name"] == "Overhead Press"
-    assert data["exercises"][0]["sets"][0]["reps"] == 5
+    assert data["exercises"][0]["sets"][0]["reps"] == 5.0
     assert data["exercises"][0]["sets"][0]["weight"] == 95.0
 
 #Test Updating a workout via POST and PUT endpoints
@@ -132,7 +132,7 @@ def test_update_workout(test_db):
             "exercises": [
                 {
                     "name": "Bent Over Row",
-                    "sets": [{"reps": 8, "weight": 115.0}]
+                    "sets": [{"reps": 8.0, "weight": 115.0}]
                 }
             ]
         }
@@ -149,7 +149,7 @@ def test_update_workout(test_db):
             "exercises": [
                 {
                     "name": "Incline Bench",
-                    "sets": [{"reps": 10, "weight": 95.0}]
+                    "sets": [{"reps": 10.0, "weight": 95.0}]
                 }
             ]
         }
@@ -160,7 +160,7 @@ def test_update_workout(test_db):
 
     assert updated_data["date"] == "2025-07-07"
     assert updated_data["exercises"][0]["name"] == "Incline Bench"
-    assert updated_data["exercises"][0]["sets"][0]["reps"] == 10
+    assert updated_data["exercises"][0]["sets"][0]["reps"] == 10.0
     assert updated_data["exercises"][0]["sets"][0]["weight"] == 95.0
 
 #Test DELETE endpoint
@@ -173,7 +173,7 @@ def test_delete_workout(test_db):
             "exercises": [
                 {
                     "name": "Overhead Press",
-                    "sets": [{"reps": 6, "weight": 85.0}]
+                    "sets": [{"reps": 6.0, "weight": 85.0}]
                 }
             ]
         }

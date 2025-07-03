@@ -24,7 +24,7 @@ class Set(Base):
     __tablename__ = "sets"
 
     id = Column(Integer, primary_key=True, index=True)
-    reps =Column(Integer, nullable=False) # this is an integer for the time being, add partial reps later
+    reps =Column(Float, nullable=False) # this is an integer for the time being, add partial reps later
     weight = Column(Float, nullable=False) #float needed for weight
 
     exercise_id = Column(Integer, ForeignKey("exercises.id"))
