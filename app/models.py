@@ -1,3 +1,6 @@
+#Author: Ian Surat-Mosher | Github: @iMosher
+#Description: Model classes for Workout Tracker
+
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float
 from sqlalchemy.orm import relationship
 from app.database import Base

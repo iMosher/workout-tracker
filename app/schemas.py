@@ -1,10 +1,13 @@
+#Author: Ian Surat-Mosher | Github: @iMosher
+#Description: Schemas for Workout Tracker
+
 from pydantic import BaseModel, ConfigDict
 from typing import List, Optional
 from datetime import date
 
 #Create Schemas
 class SetCreate(BaseModel):
-    reps: int
+    reps: float
     weight: float
 
 class ExerciseCreate(BaseModel):
@@ -19,7 +22,7 @@ class WorkoutCreate(BaseModel):
 #Response Schemas
 class SetResponse(BaseModel):
     id: int
-    reps: int
+    reps: float
     weight: float
 
     model_config = ConfigDict(from_attributes=True)

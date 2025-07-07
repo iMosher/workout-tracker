@@ -1,3 +1,6 @@
+#Author: Ian Surat-Mosher | Github: @iMosher
+#Description: Testing for API endpoints
+
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))

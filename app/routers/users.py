@@ -1,3 +1,5 @@
+#Author: Ian Surat-Mosher | Github: @iMosher
+#Description: API endpoints for users
 from fastapi import APIRouter
 
 router = APIRouter()

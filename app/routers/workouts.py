@@ -1,3 +1,6 @@
+#Author: Ian Surat-Mosher | Github: @iMosher
+#Description: API Endpoints for Workout Data
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, selectinload
 from app.database import get_db
