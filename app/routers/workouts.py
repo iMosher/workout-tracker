@@ -4,7 +4,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, selectinload
 from app.database import get_db
-from app.models import Workout, Exercise, Set
+from app.models import Workout, Exercise, Set, Tag
 from app.schemas import WorkoutCreate, WorkoutResponse
 from typing import List
 
@@ -12,6 +12,7 @@ router = APIRouter()
 
 @router.post("/", response_model=WorkoutResponse)
 def create_workout(workout: WorkoutCreate, db: Session = Depends(get_db)):
+    print("Parsed Workout:", workout)
     db_workout = Workout(date=workout.date)
     db.add(db_workout)
     db.commit()
@@ -27,6 +28,16 @@ def create_workout(workout: WorkoutCreate, db: Session = Depends(get_db)):
             db_set = Set(reps=set_data.reps, weight=set_data.weight, exercise_id=db_exercise.id)
             db.add(db_set)
     
+    for tag_data in workout.tags:
+        existing_tag = db.query(Tag).filter(Tag.name == tag_data.name).first()
+
+        if existing_tag:
+            db_workout.tags.append(existing_tag)
+        else:
+            new_Tag = Tag(name =tag_data.name, color = tag_data.color)
+            db.add(new_Tag)
+            db_workout.tags.append(new_Tag)
+
     db.commit()
     db.refresh(db_workout)
     return db_workout
@@ -34,13 +45,15 @@ def create_workout(workout: WorkoutCreate, db: Session = Depends(get_db)):
 @router.get("/", response_model=List[WorkoutResponse])
 def get_all_workouts(db: Session = Depends(get_db)):
     return db.query(Workout).options(
-        selectinload(Workout.exercises).selectinload(Exercise.sets)
+        selectinload(Workout.exercises).selectinload(Exercise.sets),
+        selectinload(Workout.tags)
     ).all()
 
 @router.get("/{workout_id}", response_model=WorkoutResponse)
 def get_workout_by_id(workout_id: int, db: Session = Depends(get_db)):
     workout = db.query(Workout).options(
-        selectinload(Workout.exercises).selectinload(Exercise.sets)
+        selectinload(Workout.exercises).selectinload(Exercise.sets),
+        selectinload(Workout.tags)
     ).filter(Workout.id == workout_id).first()
     if not workout:
         raise HTTPException(status_code=404, detail="Workout not found")

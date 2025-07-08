@@ -1,6 +1,7 @@
 // Author: Ian Surat-Mosher | Github: @iMosher
 // Description: Form Component for workout entry
 import React, { useState } from 'react';
+import WorkoutPreview from './WorkoutPreview';
 
 function WorkoutForm() {
   //workout variables
@@ -50,7 +51,7 @@ function WorkoutForm() {
   //Remove an exercise
   function removeExercise(exerciseIndex) {
     const updated = [...exercises];
-    updated.splice[(exerciseIndex, 1)];
+    updated.splice(exerciseIndex, 1);
     setExercises(updated);
   }
 
@@ -73,8 +74,8 @@ function WorkoutForm() {
       }
       for (let j = 0; j < ex.sets.length; j++) {
         const s = ex.sets[j];
-        if (!s.reps || !s.weight) {
-          alert(`Set ${j + 1} in Exercise ${i + 1} is missing reps or weight.`);
+        if (!s.reps) {
+          alert(`Set ${j + 1} in Exercise ${i + 1} is missing reps.`);
           return;
         }
       }
@@ -86,7 +87,7 @@ function WorkoutForm() {
         name: exercise.name,
         sets: exercise.sets.map((set) => ({
           reps: parseFloat(set.reps),
-          weight: parseFloat(set.weight),
+          weight: set.weight === '' ? null : parseFloat(set.weight),
         })),
       })),
     };
@@ -165,11 +166,22 @@ function WorkoutForm() {
                   )
                 }
               />
+
+              <button
+                type="button"
+                onClick={() => removeSet(exerciseIndex, setIndex)}
+                style={{ marginLeft: '0.5rem' }}
+              >
+                🗑 Remove Set
+              </button>
             </div>
           ))}
 
           <button type="button" onClick={() => addSet(exerciseIndex)}>
             + Add Set
+          </button>
+          <button type="button" onClick={() => removeExercise(exerciseIndex)}>
+            🗑 Remove Exercise
           </button>
         </div>
       ))}
@@ -177,14 +189,7 @@ function WorkoutForm() {
       <button type="button" onClick={addExercise}>
         + Add Exercise
       </button>
-
-      <button
-        type="button"
-        onClick={() => removeExercise(exerciseIndex)}
-        style={{ color: 'red', marginTop: '0.5rem' }}
-      >
-        🗑 Remove Exercise
-      </button>
+      <WorkoutPreview date={date} exercises={exercises} />
       <div>
         <button type="submit">Submit Workout</button>
       </div>
