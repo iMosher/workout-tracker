@@ -21,7 +21,46 @@ function WorkoutList() {
   }, []);
   return (
     <div>
-      <h2> Workout History</h2>
+      <h2>Workout History</h2>
+      {workouts.map((workout) => (
+        <div key={workout.id} style={{ marginBottom: '1rem' }}>
+          <h3>{workout.date}</h3>
+
+          {workout.tags.length > 0 && (
+            <div>
+              {workout.tags.map((tag) => (
+                <span
+                  key={tag.id}
+                  style={{
+                    backgroundColor: tag.color || '#ddd',
+                    color: '#000',
+                    padding: '0.25rem 0.5rem',
+                    marginRight: '0.5rem',
+                    borderRadius: '5px',
+                  }}
+                >
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {workout.exercises.map((exercise) => (
+            <div key={exercise.id}>
+              <strong>{exercise.name}</strong>
+              <ul>
+                {exercise.sets.map((set) => (
+                  <li key={set.id}>
+                    Reps: {set.reps}, Weight: {set.weight ?? 'Bodyweight'}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   );
 }
+
+export default WorkoutList;

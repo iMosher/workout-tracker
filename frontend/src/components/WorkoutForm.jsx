@@ -12,6 +12,7 @@ function WorkoutForm() {
       sets: [{ reps: '', weight: '' }],
     },
   ]);
+  const [tags, setTags] = useState([{ name: '', color: '' }]);
 
   //Exercise name change event handler
   function handleExerciseNameChange(index, value) {
@@ -34,7 +35,6 @@ function WorkoutForm() {
     setExercises(updated);
   }
 
-  //Remove a set
   function removeSet(exerciseIndex, setIndex) {
     const updated = [...exercises];
     updated[exerciseIndex].sets.splice(setIndex, 1);
@@ -48,13 +48,27 @@ function WorkoutForm() {
     ]);
   }
 
-  //Remove an exercise
   function removeExercise(exerciseIndex) {
     const updated = [...exercises];
     updated.splice(exerciseIndex, 1);
     setExercises(updated);
   }
 
+  function handleTagChange(index, field, value) {
+    const updated = [...tags];
+    updated[index][field] = value;
+    setTags(updated);
+  }
+
+  function addTag() {
+    setTags([...tags, { name: '', color: '#000000' }]);
+  }
+
+  function removeTag(index) {
+    const updated = [...tags];
+    updated.splice(index, 1);
+    setTags(updated);
+  }
   //Submit the workout
   const handleSubmit = async (e) => {
     // prevent default refresh on submit
@@ -189,6 +203,33 @@ function WorkoutForm() {
       <button type="button" onClick={addExercise}>
         + Add Exercise
       </button>
+      <h3>Tags:</h3>
+      {tags.map((tag, index) => (
+        <div key={index}>
+          <label>Tag Name:</label>
+          <input
+            type="text"
+            value={tag.name}
+            onChange={(e) => handleTagChange(index, 'name', e.target.value)}
+          />
+
+          <label>Color:</label>
+          <input
+            type="color"
+            value={tag.color}
+            onChange={(e) => handleTagChange(index, 'color', e.target.value)}
+          />
+
+          <button type="button" onClick={() => removeTag(index)}>
+            🗑
+          </button>
+        </div>
+      ))}
+
+      <button type="button" onClick={addTag}>
+        + Add Tag
+      </button>
+
       <WorkoutPreview date={date} exercises={exercises} />
       <div>
         <button type="submit">Submit Workout</button>
